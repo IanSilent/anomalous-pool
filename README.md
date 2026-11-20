@@ -1,53 +1,46 @@
-# Anomalous Pool (working title «Аномальный пул»)
+# Anomalous Pool (Аномальный пул)
 
-**Play in the browser: https://iansilent.github.io/anomalous-pool/**
+A pool roguelike. You pot coloured balls for points with a limited number of shots, and between rounds you collect artifacts that turn one shot into a chain reaction.
 
-A personal web prototype of a pool roguelike, built from `docs/design-ru.md`.
-In each round you pot coloured balls for points with a limited number of shots.
-Between rounds you build a set of artifacts and ball properties that turn one shot into a chain reaction.
+[![Anomalous Pool: round 1 on the table, the act boss on the right](docs/screenshot.jpg)](https://iansilent.github.io/anomalous-pool/)
 
-## Run
+**[▶ Play in the browser](https://iansilent.github.io/anomalous-pool/)** · mouse or touch · UI in Russian
 
-- Double-click `index.html`. It needs no server, no build step and no network.
-- To share: `node tools/build.js` writes one self-contained file, `dist/anomalous-pool.html`. Send that file alone.
-- Or serve the folder: `python3 -m http.server 8777` → http://localhost:8777.
-- Progress is stored in the browser's `localStorage`, separately for the profile and the current run.
-  Opening the file by double-click and through the server gives two separate saves.
+## The idea being tested
+
+Does the "build a scoring engine" loop of a deckbuilder work when the hand you play is a physical pool shot?
+
+- A round has a target score and a few shots. Colour combos and trick shots (banks, combinations, potting several balls) multiply the score.
+- After a round you pick a reward and visit a shop: artifacts and ball properties that reward one way of playing, such as single strong shots, bank shots or even potting the cue ball.
+- An act is three rounds, and the third is a boss with a rule that breaks your habits.
+- The setting is an underground club where the anomalies grow from act to act.
+
+Every run has a code, and the same code gives the same run.
 
 ## Controls
 
 | Action | Mouse / touch | Keys |
 |---|---|---|
-| Set direction | click / tap the table (a hover previews it; with aim assist the aim snaps to a pot) | ← → fine turn by 0.1°, Shift + ← → by 1° |
-| Power | the three buttons | 1 / 2 / 3 |
+| Aim | Move over the table; the aim snaps to a pot when one is possible. Click to lock it | ← → turn by 0.1°, Shift + ← → by 1° |
+| Power | Three buttons | 1 / 2 / 3 |
 | Strike | «Удар» | Space |
-| Skip the score count-up | click the table | Space |
-| Speed up motion and counting | ⏩ | F |
-| Pause / close | ≡ Меню | Esc |
+| Speed up | ⏩ | F |
+| Menu | ≡ | Esc |
 
-## Layout
+## What is inside
 
-| File | Contents |
-|---|---|
-| `src/config.js` | every number: targets, prices, multipliers, physics, wave radius and impulse |
-| `src/rng.js` | seeded streams derived from the run code |
-| `src/physics.js` | table, 6 pockets, fixed-step simulation, prediction with the same step |
-| `src/layouts.js` | 6 prepared loose racks in 3 families |
-| `src/content.js` | artifacts, achievements, base pool |
-| `src/rules.js` | shot resolution and scoring (§13.1 order) |
-| `src/run.js` | run state machine: rounds, rewards, shop, victory, endless, save |
-| `src/profile.js` | storage: profile, run, diagnostics |
-| `src/render.js`, `src/ui.js`, `src/audio.js`, `src/main.js` | drawing, DOM screens, procedural sound, input and loop |
-| `tools/check.js` | headless checks and a greedy bot |
+- [docs/design-ru.md](docs/design-ru.md): the full design document (in Russian).
+- `src/config.js`: every number in one place — targets, prices, multipliers, physics.
+- A fixed-step physics simulation, so the aim preview and the real shot always agree.
+
+## Run locally
+
+Plain HTML, CSS and JavaScript on a canvas. No build step and no dependencies. Open `index.html`. Progress is saved in the browser.
 
 ## Checks
+
+Rule checks plus a greedy bot that plays whole runs headlessly:
 
 ```bash
 node tools/check.js
 ```
-
-```bash
-node tools/check.js --bot 10
-```
-
-The first runs every check plus 3 bot runs. The second runs only the bot, here 10 runs.
